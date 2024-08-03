@@ -1,4 +1,4 @@
-/* testFileOps.cpp
+/* TestFileOps.cpp
 description:
 This is a bottom-up test driver that aims to test the functionality of reading from and writing to our Requester Database, accessed using our Requester module functions
 The test tests multiple functions and returns a Pass/ Fail verdict based on whether or not they function as they are intended to. 

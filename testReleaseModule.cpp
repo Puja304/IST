@@ -1,5 +1,5 @@
 /*
-testReleaseModule.cpp
+TestReleaseModule.cpp
 Unit Test 2: Testing the Product's Release Database
 his is a bottom-up test driver that aims to test the overall functionality of our Product Module's Release Database.
 The test calls each of its functions at least once and checks for two things:
@@ -10,15 +10,13 @@ For this module : a function will return 0 if successfully executed and 1 otherw
 Since each test is a function , the module will be initialized at the beginning and uninitialized at the end for each (these two functions will be tested first)
 
 version history:
-ver1 -
-    24/07/16, original by Puja Shah
+ver1 -24/07/16, original by Puja Shah
 */
 
 #include <iostream>
 #include <cassert>
 #include "Product.h"
 #include <cstring>
-
 
 /*
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------

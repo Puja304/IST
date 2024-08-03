@@ -1,0 +1,2 @@
+del *.dat
+.\PREPOP.exe

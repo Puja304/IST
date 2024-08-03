@@ -3,7 +3,9 @@ description:
 This is the module for interface of maintenance of requester objects in the requester 
 database. 
 version history:
-ver2 -24/07/16, proposed by Nicolao Baretto, rewrite by Wah Paw Hser
+ver3 -24/07/15, updated by Wah Paw Hser
+    -declared the getRequesterCount() method
+ver2 -24/07/14, proposed by Nicolao Baretto, rewrite by Wah Paw Hser
     -full revision of Requester.h interface
 ver1 -24/07/02, original by Wah Paw Hser and Puja Shah
 
@@ -23,9 +25,11 @@ typedef struct
     char phone[PHONE_NUMBER_SIZE] = "";          // phone number of requester
     char email[MAX_EMAIL_SIZE] = "";             // email of requester
     char department[MAX_DEPARTMENT_SIZE] = "";   // department of requester
-    int requesterId = -1;         
+    int32_t requesterId = -1;         
 }requester;
 
+// class managing file interaction with requester database
+// provides high level read and write with requester objects
 class RequesterDatabase
 {
     public:
@@ -127,7 +131,7 @@ class RequesterDatabase
         return 0 on successful seek, return 1 on failure.
     */
 
-    int64_t getRequesterCount();
+    static int64_t getRequesterCount();
     /* description:
         returns the number of requesters in the database.
     returns:

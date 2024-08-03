@@ -2,7 +2,13 @@
 description:
 This is the implementation of the Requester module
 version history:
-ver1 -24/07/16, original by Wah Paw Hser
+ver4 -24/07/25, update by Nicolao Barreto
+     -select function fix
+ver3 -24/07/25, updated by Wah Paw Hser
+    -changed init() so that it creates the requester file if it doesn't already exist
+ver2 -24/07/15, updated by Wah Paw Hser
+    -implemented getRequesterCount() and fixed the filename
+ver1 -24/07/14, original by Wah Paw Hser
 */
 
 //==================
@@ -26,13 +32,22 @@ int64_t RequesterDatabase::requesterCount = 0;
 //==================
 
 /* function init:
-    this function is implemented to initialize the requester database by opening the file,
-    calculate the number of reqeusters currently in the database, and intitialize the utility
-    variables to 0. Returns 0 on successfuly initiazation, returns 1 elsewise. 
+    this function is implemented to initialize the requester database by opening the file, create
+    a file, if it doesn't already exist, and calculate the number of reqeusters currently in the
+    database, and intitialize the utility variables to 0. Returns 0 on successfuly initiazation,
+    returns 1 elsewise. 
 */
 bool RequesterDatabase::init() {
     // open requester file
     requesterData.open(filename, std::ios::in | std::ios::out | std::ios::binary);
+
+    // create file if it doesn't already exist
+    if (!requesterData.is_open()) {
+        requesterData.clear();
+        std::ofstream createFile(filename, std::ios::out | std::ios::binary);
+        createFile.close();
+        requesterData.open(filename, std::ios::in | std::ios::out | std::ios::binary);
+    }
 
     // return 1 if the file does not open
     if (!requesterData.is_open()) {
@@ -177,15 +192,15 @@ bool RequesterDatabase::getNext(requester& readInto, requester& filter) {
 */
 bool RequesterDatabase::select(requester& readInto, int index, int menuCount) {
     // error check the index, return 1 if not legal
-    if (index <= 0 || index > menuCount || index > 20 || index > fileIndex) {
+    if (index <= 0 || index > menuCount || index > 20) {
         return 1;
     }
 
     // find the index of the selected in the circular array
-    int64_t position = previouslyAccessed[(previouslyAccessedPosition - index + 20) % 20];
+    int64_t position = previouslyAccessed[(previouslyAccessedPosition - 1 + index - menuCount) % 20];
 
     // seek and read the requester
-    requesterData.seekg(position * sizeof(requester), std::ios::beg);
+    requesterData.seekg(previouslyAccessed[position] * sizeof(requester), std::ios::beg);
     requesterData.read(reinterpret_cast<char*>(&readInto), sizeof(requester));
 
     // return 1 if data could not be read
@@ -204,6 +219,7 @@ bool RequesterDatabase::select(requester& readInto, int index, int menuCount) {
 */
 bool RequesterDatabase::seekToBeginning() {
     // return position in the file to the beginning
+    requesterData.clear();
     requesterData.seekg(0, std::ios::beg);
     fileIndex = 0;
     return 0;
